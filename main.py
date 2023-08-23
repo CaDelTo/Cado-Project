@@ -3,6 +3,7 @@ import speech_recognition as sr
 import pygame
 import time
 import numpy as np
+import webbrowser
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
@@ -69,11 +70,22 @@ def wakeUpSound():
     # Detén pygame
     pygame.quit()
 
+
+def open(webURL):
+    webbrowser.open(webURL)
+
 on = True
+
 commands = {
     #command:function
-
+    'open':open()
 }
+
+webURLS = {
+    'youtube':'youtube.com',
+    'github':'github.com'
+}
+
 while on:
     command = takeCommand()
     print(command)
@@ -86,9 +98,17 @@ while on:
         else:
             for word in command:
                 if word in commands:
-                    commands[word]
-                    break
-    elif command.compare('None'):
+                    if word == ('open'):
+                        for url in command:
+                            if url in webURLS:
+                                commands[word](url)
+                                break
+                            else:
+                                tell("I did not find the web in my database")
+                    else:
+                        commands[word]
+                        break
+    elif command == ('None'):
         tell("I did not understood what u said")
         
         
